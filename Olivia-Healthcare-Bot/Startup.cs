@@ -16,6 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Olivia_Healthcare_Bot.Bots;
 using Olivia_Healthcare_Bot.Bots.Services;
 using Olivia_Healthcare_Bot.Dialogs;
+using Microsoft.Bot.Protocol.StreamingExtensions.NetCore; //added for DLS
 
 namespace Olivia_Healthcare_Bot
 {
@@ -37,7 +38,8 @@ namespace Olivia_Healthcare_Bot
             services.AddSingleton<ICredentialProvider, ConfigurationCredentialProvider>();
 
             // Create the Bot Framework Adapter.
-            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>();
+            //services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>(); updated for DLS
+            services.AddSingleton<IBotFrameworkHttpAdapter, WebSocketEnabledHttpAdapter>();
 
             ConfigureState(services);
 
@@ -89,6 +91,7 @@ namespace Olivia_Healthcare_Bot
             app.UseStaticFiles();
 
             //app.UseHttpsRedirection();
+            app.UseWebSockets(); // added for DLS
             app.UseMvc();
         }
     }

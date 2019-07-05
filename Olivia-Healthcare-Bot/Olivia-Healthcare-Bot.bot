@@ -2,14 +2,14 @@
     "name": "Olivia-Healthcare-Bot",
     "description": "",
     "services": [
-        {
-            "type": "endpoint",
-            "appId": "",
-            "appPassword": "",
-            "endpoint": "http://localhost:3978/api/messages",
-            "id": "ac43af70-9c04-11e9-bc85-453356b1cbd2",
-            "name": "development"
-        }
+      {
+        "type": "endpoint",
+        "appId": "90bb19fa-efe6-462a-bbf5-9fc5eadac02b",
+        "appPassword": "ERXt0YGv*MTxTZOn5/aHX@r5:32B7JG9",
+        "endpoint": "http://localhost:3978/api/messages",
+        "id": "ac43af70-9c04-11e9-bc85-453356b1cbd2",
+        "name": "development"
+      }
     ],
     "padlock": "",
     "version": "2.0",
