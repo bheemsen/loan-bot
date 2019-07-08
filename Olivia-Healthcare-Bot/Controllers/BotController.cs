@@ -26,8 +26,8 @@ namespace Olivia_Healthcare_Bot.Controllers
             Bot = bot;
         }
 
-        //[HttpPost] --> changed for DLS
-        [HttpPost, HttpGet]
+        [HttpPost] //--> changed for DLS
+        //[HttpPost, HttpGet]
         public async Task PostAsync()
         {
             // Delegate the processing of the HTTP POST to the adapter.

@@ -16,7 +16,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Olivia_Healthcare_Bot.Bots;
 using Olivia_Healthcare_Bot.Bots.Services;
 using Olivia_Healthcare_Bot.Dialogs;
-using Microsoft.Bot.Protocol.StreamingExtensions.NetCore; //added for DLS
+using Olivia_Healthcare_Bot.Services;
+//using Microsoft.Bot.Protocol.StreamingExtensions.NetCore; //added for DLS
 
 namespace Olivia_Healthcare_Bot
 {
@@ -38,8 +39,11 @@ namespace Olivia_Healthcare_Bot
             services.AddSingleton<ICredentialProvider, ConfigurationCredentialProvider>();
 
             // Create the Bot Framework Adapter.
-            //services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>(); updated for DLS
-            services.AddSingleton<IBotFrameworkHttpAdapter, WebSocketEnabledHttpAdapter>();
+            services.AddSingleton<IBotFrameworkHttpAdapter, BotFrameworkHttpAdapter>(); //updated for DLS
+                                                                                        //services.AddSingleton<IBotFrameworkHttpAdapter, WebSocketEnabledHttpAdapter>();
+
+            // Configure Services
+            services.AddSingleton<BotServices>();
 
             ConfigureState(services);
 
@@ -52,12 +56,12 @@ namespace Olivia_Healthcare_Bot
         public void ConfigureState(IServiceCollection services)
         {
             // Create the storage we'll be using for User and Conversation state. (Memory is great for testing purposes.) 
-            //services.AddSingleton<IStorage, MemoryStorage>();
+            services.AddSingleton<IStorage, MemoryStorage>();
 
-            var storageAccount = "DefaultEndpointsProtocol=https;AccountName=oliviahealthcarestorage;AccountKey=mmyaDnDG9GpuMmmaq4HDjVBcJ5Lh547K1isp1JK71ut64Y5QVYKJwtO0q/7tTKw9jm2RMwBu7TJwWJU43NCZ6g==;EndpointSuffix=core.windows.net";
-            var storageContainer = "oliviahealthcarestorage";
+            //var storageAccount = "DefaultEndpointsProtocol=https;AccountName=oliviahealthcarestorage;AccountKey=mmyaDnDG9GpuMmmaq4HDjVBcJ5Lh547K1isp1JK71ut64Y5QVYKJwtO0q/7tTKw9jm2RMwBu7TJwWJU43NCZ6g==;EndpointSuffix=core.windows.net";
+            //var storageContainer = "oliviahealthcarestorage";
 
-            services.AddSingleton<IStorage>(new AzureBlobStorage(storageAccount, storageContainer));
+            //services.AddSingleton<IStorage>(new AzureBlobStorage(storageAccount, storageContainer));
 
 
             // Create the User state. 
@@ -91,7 +95,7 @@ namespace Olivia_Healthcare_Bot
             app.UseStaticFiles();
 
             //app.UseHttpsRedirection();
-            app.UseWebSockets(); // added for DLS
+            //app.UseWebSockets(); // added for DLS
             app.UseMvc();
         }
     }
