@@ -49,7 +49,7 @@ namespace Olivia_Healthcare_Bot.Dialogs
                 return await stepContext.PromptAsync($"{nameof(GreetingDialog)}.name",
                     new PromptOptions
                     {
-                        Prompt = MessageFactory.Text("Hi I am Olivia, your health assistant. What is your name?")
+                        Prompt = MessageFactory.Text("Hello my name is Anna, your virtual health assistant. Based on your symptoms I can advice you whether you need to see a doctor, call 911 or get self care information? Let's start what is your name?")
                     }, cancellationToken);
             }
             else

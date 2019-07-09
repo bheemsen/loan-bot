@@ -37,7 +37,7 @@ namespace Olivia_Healthcare_Bot.Dialogs
 
             // Add Named Dialogs
             AddDialog(new GreetingDialog($"{nameof(MainDialog)}.greeting", _botStateService));
-            //AddDialog(new SymptomCheckerDialog($"{nameof(MainDialog)}.symptomChecker", _botStateService));            
+            AddDialog(new SymptomCheckerDialog($"{nameof(MainDialog)}.symptomChecker", _botStateService));            
             AddDialog(new SymptomDiagnoseDialog($"{nameof(MainDialog)}.symptomDiagnose", _botStateService, _botServices));
             AddDialog(new WaterfallDialog($"{nameof(MainDialog)}.mainFlow", waterfallSteps));
 
