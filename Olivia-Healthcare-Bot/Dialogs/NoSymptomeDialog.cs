@@ -2,6 +2,7 @@
 using Microsoft.Bot.Builder.Dialogs;
 using Olivia_Healthcare_Bot.Bots.Services;
 using Olivia_Healthcare_Bot.Services;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,12 +28,13 @@ namespace Olivia_Healthcare_Bot.Dialogs
             // Create Waterfall Steps
             var waterfallSteps = new WaterfallStep[]
             {
-                InitialStepAsync,
-                FinalStepAsync
+                InitialStepAsync//,
+                //FinalStepAsync
             };
 
             // Add Named Dialogs
             AddDialog(new WaterfallDialog($"{nameof(NoSymptomeDialog)}.mainFlow", waterfallSteps));
+            AddDialog(new TextPrompt($"{nameof(NoSymptomeDialog)}.NoSymptoms"));
 
             // Set the starting Dialog
             InitialDialogId = $"{nameof(NoSymptomeDialog)}.mainFlow";
@@ -40,11 +42,14 @@ namespace Olivia_Healthcare_Bot.Dialogs
 
         private async Task<DialogTurnResult> InitialStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            return await stepContext.PromptAsync($"{nameof(SymptomDiagnoseDialog)}.BasicSymptoms",
-                new PromptOptions
-                {
-                    Prompt = MessageFactory.Text("Good to hear that. Your blood pressure, pulse rate and heart rate also looks fine. Have a great day!!")
-                }, cancellationToken);
+
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text(String.Format("Good to hear that. Your blood pressure, pulse rate and heart rate based on data received from registered health device also looks fine. Have a great day!!")), cancellationToken);
+            return await stepContext.EndDialogAsync(null, cancellationToken);
+            //return await stepContext.PromptAsync($"{nameof(SymptomDiagnoseDialog)}.NoSymptoms",
+            //    new PromptOptions
+            //    {
+            //        Prompt = MessageFactory.Text("Good to hear that. Your blood pressure, pulse rate and heart rate also looks fine. Have a great day!!")
+            //    }, cancellationToken);
         }
 
         private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)

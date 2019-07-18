@@ -36,9 +36,10 @@ namespace Olivia_Healthcare_Bot.Dialogs
             };
 
             // Add Named Dialogs
-            AddDialog(new GreetingDialog($"{nameof(MainDialog)}.greeting", _botStateService));
+            AddDialog(new GreetingDialog($"{nameof(MainDialog)}.greeting", _botStateService, _botServices));
             AddDialog(new SymptomCheckerDialog($"{nameof(MainDialog)}.symptomChecker", _botStateService));            
             AddDialog(new SymptomDiagnoseDialog($"{nameof(MainDialog)}.symptomDiagnose", _botStateService, _botServices));
+            AddDialog(new NoSymptomeDialog($"{nameof(MainDialog)}.noSymptom", _botStateService, _botServices));
             AddDialog(new WaterfallDialog($"{nameof(MainDialog)}.mainFlow", waterfallSteps));
 
             // Set the starting Dialog
@@ -68,7 +69,9 @@ namespace Olivia_Healthcare_Bot.Dialogs
                 case "Greeting":
                     return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.greeting", null, cancellationToken);
                 case "Symtomcheck":
-                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.symptomDiagnose", null, cancellationToken);               
+                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.symptomDiagnose", null, cancellationToken);
+                case "NoSymptomCheck":
+                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.noSymptom", null, cancellationToken);
                 default:
                     await stepContext.Context.SendActivityAsync(MessageFactory.Text($"I'm sorry I don't know what you mean."), cancellationToken);
                     break;

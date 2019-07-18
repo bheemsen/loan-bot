@@ -95,7 +95,7 @@ namespace Olivia_Healthcare_Bot.Dialogs
                 new PromptOptions
                 {
                     Prompt = MessageFactory.Text($"How long has this current {strEntities} been going on?"),
-                    RetryPrompt = MessageFactory.Text("The value entered must be numeric."),
+                    //RetryPrompt = MessageFactory.Text("The value entered must be numeric."),
                 }, cancellationToken);
         }
 
@@ -107,13 +107,13 @@ namespace Olivia_Healthcare_Bot.Dialogs
             switch ((string)stepContext.Values["basicSymptoms"])
             {
                 case "headache":
-                    promptMessage = "Did you had coffee, energy drink or some sort of soda in last few hours";
+                    promptMessage = "Did you had coffee, energy drink or some sort of soda lately?";
                     break;
                 case "cold":
-                    promptMessage = "Did you had cold drink, ice cream or some sort of cold eatables in last few hours";
+                    promptMessage = "Did you had cold drink, ice cream or some sort of cold eatables lately?";
                     break;
                 case "cold, fever":
-                    promptMessage = "Did you had cold drink, ice cream or some sort of cold eatables in last few hours";
+                    promptMessage = "Did you had cold drink, ice cream or some sort of cold eatables lately?";
                     break;
                 default:
                     break;
@@ -139,11 +139,11 @@ namespace Olivia_Healthcare_Bot.Dialogs
                     case "headache":
                         if ((string)stepContext.Result.ToString().ToLower() == "yes")
                         {
-                            promptMessage = "Allright, nothing much to worry about. Based on the information received from your registered device and facial expression you looks fine. You can have a dose of Panadol Advance 500 mg tablet";
+                            promptMessage = "Allright, nothing much to worry about. Based on the information received from your registered device and facial expression you looks fine. You can have a dose of Panadol Advance 500 mg tablet. Do you need some other help?";
                         }
                         else
                         {
-                            promptMessage = "Allright, nothing much to worry about. Based on the information received from your registered device and facial expression you looks fine. You can take some rest for a while";
+                            promptMessage = "Allright, nothing much to worry about. Based on the information received from your registered device and facial expression you looks fine. You can take some rest for a while. Do you need some other help?";
                         }
 
                         //await stepContext.Context.SendActivityAsync(MessageFactory.Text(promptMessage), cancellationToken);
@@ -152,16 +152,16 @@ namespace Olivia_Healthcare_Bot.Dialogs
                     case "cold":
                         if ((string)stepContext.Result == "yes")
                         {
-                            promptMessage = "Allright, nothing much to worry about. Based on the information received from your registered device and facial expression you looks fine. You can have a dose of Theraflu tablet and take proper rest";
+                            promptMessage = "Allright, nothing much to worry about. Based on the information received from your registered device and facial expression you looks fine. You can have a dose of Theraflu tablet and take proper rest. Do you need some other help?";
                         }
                         else
                         {
-                            promptMessage = "Allright, based on the information received from your registered device and facial expression you looks fine. You can take steam twice a day and a dose of Theraflu";
+                            promptMessage = "Allright, based on the information received from your registered device and facial expression you looks fine. You can take steam twice a day and a dose of Theraflu. Do you need some other help?";
                         }
 
                         break;
                     case "cold, fever":
-                        if ((string)stepContext.Result == "yes")
+                        if (stepContext.Result.ToString().ToLower() == "yes")
                         {
                             promptMessage = "Ok, Based on the information received from your registered device and facial expression I would recomend you to visit a doctor. Would you like me to book an appointment with your regular doctor at Medanta Hospital for today?";
                         }
@@ -189,25 +189,48 @@ namespace Olivia_Healthcare_Bot.Dialogs
 
         private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
+            switch ((string)stepContext.Values["basicSymptoms"])
+            {
+                case "headache":
+                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Get well soon, see you later :)"), cancellationToken);
+                    return await stepContext.EndDialogAsync(null, cancellationToken);
+                    
+                case "cold":
+                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Get well soon, see you later :)"), cancellationToken);
+                    return await stepContext.EndDialogAsync(null, cancellationToken);
+                default:
+                    if (stepContext.Result.ToString().ToLower() == "yes")
+                    {
+                        await stepContext.Context.SendActivityAsync(MessageFactory.Text("sure, your appointment with Dr. Nitin at 4 PM today. Get well soon."), cancellationToken);
+                    }
+                    else
+                    {
+                        await stepContext.Context.SendActivityAsync(MessageFactory.Text("sure, your appointment with Dr. Nitin at 4 PM today. Get well soon."), cancellationToken);
+                    }
+                    return await stepContext.EndDialogAsync(null, cancellationToken);
+
+            }
+
             //stepContext.Values["StandardHealthParameters"] = (string)stepContext.Result;
-            if ((string)stepContext.Values["basicSymptoms"] == "headache" || (string)stepContext.Values["basicSymptoms"] == "cold")
-            {
-                return await stepContext.EndDialogAsync(null, cancellationToken);
-            }
-            else
-            {
-                if ((string)stepContext.Result == "yes")
-                {
-                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("sure, your appointment with Dr. Nitin at 4 PM today. Get well soon."), cancellationToken);
-                }
-                else
-                {
-                    await stepContext.Context.SendActivityAsync(MessageFactory.Text("No problem, Take care and get well soon."), cancellationToken);
-                }
+            //if ((string)stepContext.Values["basicSymptoms"] == "headache" || (string)stepContext.Values["basicSymptoms"] == "cold")
+            //{
+            //    await stepContext.Context.SendActivityAsync(MessageFactory.Text("Get well soon, see you later :)"), cancellationToken);
+            //    return await stepContext.EndDialogAsync(null, cancellationToken);
+            //}
+            //else
+            //{
+            //    if (stepContext.Result.ToString().ToLower() == "yes")
+            //    {
+            //        await stepContext.Context.SendActivityAsync(MessageFactory.Text("sure, your appointment with Dr. Nitin at 4 PM today. Get well soon."), cancellationToken);
+            //    }
+            //    else
+            //    {
+            //        await stepContext.Context.SendActivityAsync(MessageFactory.Text("No problem, Take care and get well soon."), cancellationToken);
+            //    }
 
-                return await stepContext.EndDialogAsync(null, cancellationToken);
+            //    return await stepContext.EndDialogAsync(null, cancellationToken);
 
-            }
+            //}
             
         }
     }
