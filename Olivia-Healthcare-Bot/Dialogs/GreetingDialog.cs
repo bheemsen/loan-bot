@@ -30,7 +30,8 @@ namespace Olivia_Healthcare_Bot.Dialogs
             // Create Waterfall Steps
             var waterfallSteps = new WaterfallStep[]
             {
-                InitialStepAsync//,
+                StartAsync,
+                Respond
                 //FinalStepAsync
             };
 
@@ -42,44 +43,41 @@ namespace Olivia_Healthcare_Bot.Dialogs
             InitialDialogId = $"{nameof(GreetingDialog)}.mainFlow";
         }
 
-        private async Task<DialogTurnResult> InitialStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+
+        public async Task<DialogTurnResult> StartAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            //UserProfile userProfile = await _botStateService.UserProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
-
-            //await stepContext.Context.SendActivityAsync(MessageFactory.Text(String.Format("Hello my name is Anna, your virtual health assistant. Based on your symptoms I can advice you whether you need to see a doctor, call 911 or get self care information.")), cancellationToken);
-
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text(String.Format("So, how are you today?")), cancellationToken);
-            return await stepContext.EndDialogAsync(null, cancellationToken);
-
-            //return await stepContext.NextAsync(null, cancellationToken);
-            //if (string.IsNullOrEmpty(userProfile.Name))
-            //{
-            //return await stepContext.PromptAsync($"{nameof(GreetingDialog)}.name",
-            //    new PromptOptions
-            //    {
-            //        Prompt = MessageFactory.Text("Hello my name is Anna, your virtual health assistant. Based on your symptoms I can advice you whether you need to see a doctor, call 911 or get self care information? Let's start what is your name?")
-            //    }, cancellationToken);
-            //}
-            //else
-            //{
-            //    return await stepContext.NextAsync(null, cancellationToken);
-            //}
+            await stepContext.Context.SendActivityAsync(MessageFactory.Text(String.Format("Hi, I am here to help you with your home loan realted queries.")), cancellationToken);
+            return await AskForName(stepContext, cancellationToken);
+            //  return await stepContext.EndDialogAsync(null, cancellationToken);
         }
 
-        private async Task<DialogTurnResult> FinalStepAsync(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        private async Task<DialogTurnResult> AskForName(WaterfallStepContext stepContext, CancellationToken cancellationToken)
         {
-            UserProfile userProfile = await _botStateService.UserProfileAccessor.GetAsync(stepContext.Context, () => new UserProfile());
-            if (string.IsNullOrEmpty(userProfile.Name))
+            return await stepContext.PromptAsync($"{nameof(GreetingDialog)}.name",
+              new PromptOptions
+              {
+                  Prompt = MessageFactory.Text("What is your name?")
+              }, cancellationToken);
+
+        }
+
+        private async Task<DialogTurnResult> Respond(WaterfallStepContext stepContext, CancellationToken cancellationToken)
+        {
+
+            stepContext.Values["userName"] = (string)stepContext.Result;
+            if (string.IsNullOrEmpty(Convert.ToString(stepContext.Values["userName"])))
             {
-                // Set the name
-                userProfile.Name = (string)stepContext.Result;
-
-                // Save any state changes that might have occured during the turn.
-                await _botStateService.UserProfileAccessor.SetAsync(stepContext.Context, userProfile);
+                await stepContext.Context.SendActivityAsync("What is your name?");
+                stepContext.Values["userName"] = (string)stepContext.Result;
+                return await stepContext.EndDialogAsync(null, cancellationToken);
             }
+            else
+            {
+                await stepContext.Context.SendActivityAsync(string.Format("Hi {0}, Welcome to Home loan advisor. Your one stop shop for home loan related queries.", stepContext.Values["userName"]));
+                await stepContext.Context.SendActivityAsync(string.Format("We would like to know how may I assist you?"));
 
-            await stepContext.Context.SendActivityAsync(MessageFactory.Text(String.Format("How are you today?", userProfile.Name)), cancellationToken);
-            return await stepContext.EndDialogAsync(null, cancellationToken);
+                return await stepContext.EndDialogAsync(new object());
+            }
         }
     }
 }

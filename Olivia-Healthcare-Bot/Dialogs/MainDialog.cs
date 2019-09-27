@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Olivia_Healthcare_Bot.Dialogs
 {
-    public class MainDialog: ComponentDialog
+    public class MainDialog : ComponentDialog
     {
         #region Variables
         private readonly BotStateService _botStateService;
@@ -36,11 +36,22 @@ namespace Olivia_Healthcare_Bot.Dialogs
             };
 
             // Add Named Dialogs
+            AddDialog(new MiscellaneousDialog($"{nameof(MainDialog)}.miscellaneousdialog", _botStateService, _botServices));
+            AddDialog(new HomeLoanDialog($"{nameof(MainDialog)}.homeLoandialog", _botStateService, _botServices));
+            AddDialog(new RenovationDialog($"{nameof(MainDialog)}.renovationdialog", _botStateService, _botServices));
+            AddDialog(new ConstructionDialog($"{nameof(MainDialog)}.constructiondialog", _botStateService, _botServices));
+            AddDialog(new ProjectCostDialog($"{nameof(MainDialog)}.projectCost", _botStateService, _botServices));
+            AddDialog(new OwnResourcesDialog($"{nameof(MainDialog)}.ownResources", _botStateService, _botServices));
+            AddDialog(new HousingSubsidiesDialog($"{nameof(MainDialog)}.housingSubsidiesDialog", _botStateService, _botServices));
+            AddDialog(new BuyDialog($"{nameof(MainDialog)}.buydialog", _botStateService, _botServices));
+            AddDialog(new RateCalcProcessDialog($"{nameof(MainDialog)}.ratecalcProcessdialog", _botStateService));
             AddDialog(new GreetingDialog($"{nameof(MainDialog)}.greeting", _botStateService, _botServices));
-            AddDialog(new SymptomCheckerDialog($"{nameof(MainDialog)}.symptomChecker", _botStateService));            
-            AddDialog(new SymptomDiagnoseDialog($"{nameof(MainDialog)}.symptomDiagnose", _botStateService, _botServices));
-            AddDialog(new NoSymptomeDialog($"{nameof(MainDialog)}.noSymptom", _botStateService, _botServices));
+            //AddDialog(new SymptomCheckerDialog($"{nameof(MainDialog)}.symptomChecker", _botStateService));            
+            //AddDialog(new SymptomDiagnoseDialog($"{nameof(MainDialog)}.symptomDiagnose", _botStateService, _botServices));
+            //AddDialog(new NoSymptomeDialog($"{nameof(MainDialog)}.noSymptom", _botStateService, _botServices));
+
             AddDialog(new WaterfallDialog($"{nameof(MainDialog)}.mainFlow", waterfallSteps));
+
 
             // Set the starting Dialog
             InitialDialogId = $"{nameof(MainDialog)}.mainFlow";
@@ -68,10 +79,22 @@ namespace Olivia_Healthcare_Bot.Dialogs
             {
                 case "Greeting":
                     return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.greeting", null, cancellationToken);
-                case "Symtomcheck":
-                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.symptomDiagnose", null, cancellationToken);
-                case "NoSymptomCheck":
-                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.noSymptom", null, cancellationToken);
+                case "LoanCalculation":
+                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.homeLoandialog", null, cancellationToken);
+                case "Construction":
+                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.constructiondialog", null, cancellationToken);
+                case "Buy":
+                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.buydialog", null, cancellationToken);
+                case "Renovation":
+                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.renovationdialog", null, cancellationToken);
+                case "Miscellaneous":
+                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.miscellaneousdialog", null, cancellationToken);
+                case "RateCalculationProcess":
+                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.ratecalcProcessdialog", null, cancellationToken);
+                case "RateCalcInfo":
+                    return await stepContext.BeginDialogAsync($"{nameof(MainDialog)}.ratecalcProcessdialog", null, cancellationToken);
+
+
                 default:
                     await stepContext.Context.SendActivityAsync(MessageFactory.Text($"I'm sorry I don't know what you mean."), cancellationToken);
                     break;

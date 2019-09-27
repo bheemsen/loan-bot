@@ -2,17 +2,18 @@
     "name": "dev",
     "description": "",
     "services": [
-        {
-            "type": "endpoint",
-            "appId": "ef186634-775d-4a08-9339-95c9f0eb69cc",
-            "appPassword": "uC70ztnskS2tCkqOw?mi[pqnxic]Ny0?",
-            "endpoint": "http://localhost:3978/api/messages",
-            "id": "af7770e0-a1af-11e9-bc5b-5f77a631084b",
-            "name": "http://localhost:3978/api/messages"
-        }
+      {
+        "type": "endpoint",
+        "appId": "",
+        "appPassword": "",
+        "endpoint": "http://localhost:3978/api/messages",
+        "id": "af7770e0-a1af-11e9-bc5b-5f77a631084b",
+        "name": "http://localhost:3978/api/messages"
+      }
+     
     ],
     "padlock": "",
     "version": "2.0",
-    "overrides": null,
-    "path": "D:\\POCs\\BOT\\GSKHealthcre\\Olivia-Healthcare-Bot\\Olivia-Healthcare-Bot\\dev.bot"
+    "path": "D:\\XebiaWork\\BOT\\Olivia-Healthcare-Bot\\dev.bot",
+    "overrides": null
 }
